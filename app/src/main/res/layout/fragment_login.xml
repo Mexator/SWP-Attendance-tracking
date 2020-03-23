@@ -11,11 +11,15 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:id="@+id/login_edit"
         android:hint="@string/login_prompt" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/password_edit"
+        android:inputType="textPassword"
         android:hint="@string/password_prompt" />
 
     <Button

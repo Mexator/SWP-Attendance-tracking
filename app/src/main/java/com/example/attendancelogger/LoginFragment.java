@@ -11,6 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import javax.security.auth.login.LoginException;
 
 
 /**
@@ -19,14 +23,8 @@ import android.widget.Button;
  * create an instance of this fragment.
  */
 public class LoginFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private EditText loginEdit;
+    private EditText passwordEdit;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -40,12 +38,9 @@ public class LoginFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment LoginFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static LoginFragment newInstance(String param1, String param2) {
         LoginFragment fragment = new LoginFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,10 +48,6 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -69,10 +60,28 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        loginEdit = getView().findViewById(R.id.login_edit);
+        passwordEdit = getView().findViewById(R.id.password_edit);
         getView().findViewById(R.id.button_log_in).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_markMeAttendFragment);
+                AttendanceBackend backend = AttendanceBackend.getInstance();
+                String login = loginEdit.getText().toString();
+                String password = passwordEdit.getText().toString();
+                try {
+                    backend.logIn(login, password);
+                }
+                catch (LoginException ex){
+                    Toast.makeText(getActivity(),ex.toString(),Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(backend.getUser().getRole() == User.Roles.STUDENT)
+                    Navigation.findNavController(v).navigate(
+                            R.id.action_loginFragment_to_student_main);
+                else if (backend.getUser().getRole() == User.Roles.PROFESSOR)
+                    Navigation.findNavController(v).navigate(
+                            R.id.action_loginFragment_to_professor_main);
             }
         });
     }
