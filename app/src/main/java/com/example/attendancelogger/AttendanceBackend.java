@@ -111,7 +111,6 @@ public class AttendanceBackend{
         String url = serverURL+"presences/";
         sendRequest(Request.Method.POST,url,body,listener,errorListener);
     }
-
     private void sendRequest(int method, String url, JSONObject body,
                              Response.Listener<JSONObject> listener,
                              Response.ErrorListener errorListener){
