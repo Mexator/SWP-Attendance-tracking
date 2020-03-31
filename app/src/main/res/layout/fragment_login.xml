@@ -6,7 +6,8 @@
     android:orientation="vertical"
     android:gravity="center"
     android:paddingHorizontal="30dp"
-    tools:context=".LoginFragment">
+    tools:context=".LoginFragment"
+    android:id="@+id/login_layout">
 
     <EditText
         android:layout_width="match_parent"
