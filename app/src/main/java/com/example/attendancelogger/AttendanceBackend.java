@@ -96,6 +96,22 @@ public class AttendanceBackend{
         sendRequest(Request.Method.GET,serverURL+"current_user",null,listener,errorListener);
     }
 
+    public void sendPresenceRequest(Long classId, Long activityId, Long userId, Integer week,
+                                    Response.Listener<JSONObject> listener,
+                                    Response.ErrorListener errorListener) throws JSONException{
+
+        JSONObject body = new JSONObject();
+        JSONObject presence = new JSONObject();
+        presence.put("class_id", classId);
+        presence.put("activity_id",activityId);
+        presence.put("user_id",userId);
+        presence.put("week",week);
+        body.put("presence",presence);
+
+        String url = serverURL+"presences/";
+        sendRequest(Request.Method.POST,url,body,listener,errorListener);
+    }
+
     private void sendRequest(int method, String url, JSONObject body,
                              Response.Listener<JSONObject> listener,
                              Response.ErrorListener errorListener){

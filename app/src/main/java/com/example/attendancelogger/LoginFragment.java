@@ -104,6 +104,7 @@ public class LoginFragment extends Fragment implements Response.Listener<JSONObj
                 backend.parseUser(response.getJSONObject("user"));
                 progressBar.setVisibility(View.INVISIBLE);
                 if(backend.getUser().getRole() == User.Roles.STUDENT){
+                    //TODO Make Navigation controller a field
                     Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_student_main);
                 }
                 else{

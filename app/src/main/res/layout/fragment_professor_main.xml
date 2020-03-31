@@ -6,11 +6,21 @@
     tools:context=".ProfessorMainFragment"
     android:gravity="center"
     android:orientation="vertical"
-    >
+    android:paddingHorizontal="30dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Main screen for professor" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/start_gathering" />
+    <Button
+        android:id="@+id/button_mark_manually"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/mark_student_manually"/>
 
 </LinearLayout>

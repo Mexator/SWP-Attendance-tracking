@@ -14,7 +14,11 @@
     <string name="password_prompt">"Enter password"</string>
     <string name="action_mark_me">Mark me as attended!</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="start_gathering">Start gathering attendance</string>
+    <string name="mark_student_manually">Mark student by hand</string>
 
+    <string name="prompt_class_id">Class id</string>
+    <string name="prompt_activity_id">Activity id</string>
+    <string name="prompt_user_id">User id</string>
+    <string name="prompt_week">Week Number</string>
 </resources>
