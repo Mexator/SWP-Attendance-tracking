@@ -33,4 +33,14 @@ public class User {
         instance.ID = ID;
         instance.role = role;
     }
+
+    public static Roles parseRole(String role){
+        if(role.toLowerCase().equals("student"))
+            return Roles.STUDENT;
+        if(role.toLowerCase().equals("professor"))
+            return Roles.PROFESSOR;
+        if(role.toLowerCase().equals("administrator"))
+            return Roles.ADMIN;
+        return null;
+    }
 }
