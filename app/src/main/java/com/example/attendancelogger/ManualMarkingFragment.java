@@ -23,7 +23,7 @@ import org.json.JSONObject;
 
 public class ManualMarkingFragment extends Fragment implements View.OnClickListener, Response.Listener<JSONObject>, Response.ErrorListener {
     private EditText classIdEdit, activityIdEdit, userIdEdit, weekEdit;
-
+    private AttendanceBackend backend;
     private View progressBar;
 
     public ManualMarkingFragment() {
@@ -33,15 +33,20 @@ public class ManualMarkingFragment extends Fragment implements View.OnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        backend = AttendanceBackend.getInstance(getContext());
         return inflater.inflate(R.layout.fragment_manual_marking, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        userIdEdit = view.findViewById(R.id.user_id_edit);
+
+        if(backend.getUser().getRole() == User.Roles.STUDENT)
+            userIdEdit.setVisibility(View.GONE);
+
         classIdEdit = view.findViewById(R.id.class_id_edit);
         activityIdEdit=view.findViewById(R.id.activity_id_edit);
-        userIdEdit = view.findViewById(R.id.user_id_edit);
         weekEdit = view.findViewById(R.id.week_edit);
 
         view.findViewById(R.id.confirm_marking_button).setOnClickListener(this);
@@ -61,10 +66,16 @@ public class ManualMarkingFragment extends Fragment implements View.OnClickListe
                 progressBar.setVisibility(View.VISIBLE);
                 Long classId = Long.parseLong(classIdEdit.getText().toString());
                 Long activityId = Long.parseLong(activityIdEdit.getText().toString());
-                Long userId = Long.parseLong(userIdEdit.getText().toString());
+
+                Long userId;
+                if(backend.getUser().getRole() == User.Roles.STUDENT)
+                    userId = backend.getUser().getID();
+                else
+                    userId = Long.parseLong(userIdEdit.getText().toString());
+
                 Integer weekNumber = Integer.parseInt(weekEdit.getText().toString());
                 try {
-                    AttendanceBackend.getInstance(getContext()).sendPresenceRequest(
+                    backend.sendPresenceRequest(
                             classId,activityId,userId,weekNumber,this,this);
                 } catch (Exception e) {
                     e.printStackTrace();

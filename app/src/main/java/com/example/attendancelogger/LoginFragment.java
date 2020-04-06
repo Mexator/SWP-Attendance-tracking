@@ -115,6 +115,8 @@ public class LoginFragment extends Fragment implements Response.Listener<JSONObj
             e.printStackTrace();
         }
     }
+    
+    //TODO change login architecture
 
     @Override
     public void onErrorResponse(VolleyError error) {
@@ -133,6 +135,9 @@ public class LoginFragment extends Fragment implements Response.Listener<JSONObj
         Toast.makeText(getContext(),message,Toast.LENGTH_LONG).show();
     }
 
+    /*
+    TODO Change the event so that the finishing edit the password will send login request
+    */
     @Override
     public void onClick(View v) {
         switch (v.getId()){

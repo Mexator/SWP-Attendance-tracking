@@ -21,7 +21,11 @@
         android:id="@+id/studentMain"
         android:name="com.example.attendancelogger.StudentMainFragment"
         android:label="fragment_student_main"
-        tools:layout="@layout/fragment_student_main" />
+        tools:layout="@layout/fragment_student_main" >
+        <action
+            android:id="@+id/action_studentMain_to_manualMarkingFragment"
+            app:destination="@id/manualMarkingFragment" />
+    </fragment>
     <fragment
         android:id="@+id/professorMain"
         android:name="com.example.attendancelogger.ProfessorMainFragment"
