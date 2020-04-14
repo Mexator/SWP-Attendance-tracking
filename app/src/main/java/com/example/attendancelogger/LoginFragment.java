@@ -1,6 +1,5 @@
 package com.example.attendancelogger;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,11 +7,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -24,11 +21,11 @@ import com.android.volley.ParseError;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.example.attendancelogger.system_logic.AttendanceBackend;
+import com.example.attendancelogger.system_logic.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import javax.security.auth.login.LoginException;
 
 public class LoginFragment extends Fragment implements Response.Listener<JSONObject>,
         View.OnClickListener, Response.ErrorListener {
@@ -83,7 +80,7 @@ public class LoginFragment extends Fragment implements Response.Listener<JSONObj
         String login = loginEdit.getText().toString();
         String password = passwordEdit.getText().toString();
         try {
-                backend.logInRequest(login, password,this,this);
+                backend.sendLogInRequest(login, password,this,this);
         }
         catch (Exception ex) {
             Toast.makeText(getActivity(), ex.toString(), Toast.LENGTH_SHORT).show();
@@ -98,10 +95,11 @@ public class LoginFragment extends Fragment implements Response.Listener<JSONObj
                 JSONObject data = response.getJSONObject("data");
                 backend.setToken(data.getString("token"),
                         data.getString("renewal_token"));
-                backend.requestUser(this,this);
+                backend.sendUserRequest(this,this);
             }
             else if(response.has("user")){
-                backend.parseUser(response.getJSONObject("user"));
+                User.parseUser(response.getJSONObject("user"));
+                backend.setUser(User.getInstance());
                 progressBar.setVisibility(View.INVISIBLE);
                 if(backend.getUser().getRole() == User.Roles.STUDENT){
                     //TODO Make Navigation controller a field

@@ -9,12 +9,11 @@
     android:paddingHorizontal="40dp"
     android:id="@+id/professor_manual_layout">
 
-    <EditText
-        android:id="@+id/class_id_edit"
+    <com.example.attendancelogger.ui_components.PromptSpinner
+        android:id="@+id/class_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/prompt_class_id"
-        android:inputType="numberDecimal"/>
+        android:prompt="@string/prompt_class_select"/>
 
     <EditText
         android:id="@+id/activity_id_edit"
@@ -41,7 +40,6 @@
         android:id="@+id/confirm_marking_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/mark_student_manually"
-        android:inputType="numberDecimal"/>
+        android:text="@string/mark_student_manually"/>
 
 </LinearLayout>

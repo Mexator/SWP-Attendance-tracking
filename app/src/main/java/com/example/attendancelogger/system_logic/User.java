@@ -2,6 +2,9 @@ package com.example.attendancelogger.system_logic;
 
 import androidx.annotation.NonNull;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Represents user of attendance tracking system
  */
@@ -42,5 +45,12 @@ public class User {
         if(role.toLowerCase().equals("administrator"))
             return Roles.ADMIN;
         return null;
+    }
+
+    public static void parseUser(JSONObject user) throws JSONException {
+        String name = user.getString("first_name") + user.getString("last_name");
+        Long ID = user.getLong("id");
+        User.Roles role = User.parseRole(user.getString("role"));
+        User.getInstance().init(name,ID,role);
     }
 }
