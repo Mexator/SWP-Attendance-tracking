@@ -1,13 +1,12 @@
 package com.example.attendancelogger.ui_components;
 
 import android.content.Context;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 
 import com.example.attendancelogger.NameID;
 
@@ -17,16 +16,22 @@ import java.util.List;
  */
 public class PromptSpinnerAdapter<T extends NameID> extends ArrayAdapter<String> {
     private List<T> objects;
+    private String prompt;
+    public PromptSpinnerAdapter(@NonNull Context context, @LayoutRes int resource,
+                                @NonNull List<T> objects, @StringRes int promptResource){
+        this(context,resource,objects,context.getResources().getString(promptResource));
+    }
     public PromptSpinnerAdapter(@NonNull Context context, @LayoutRes int resource,
                                 @NonNull List<T> objects, @NonNull String selectionPrompt){
         super(context, resource);
 
         this.objects = objects;
+        this.prompt = selectionPrompt;
 
         for (T item:objects) {
             this.add(item.getName());
         }
-        this.add(selectionPrompt);
+        this.add(prompt);
     }
 /*
   Two tricks to not show first element of the list in drop-down list:
@@ -46,7 +51,10 @@ public class PromptSpinnerAdapter<T extends NameID> extends ArrayAdapter<String>
      * @return element
      */
     public T getSelectedObject(int position){
-        position++;
+        if(position == getCount()){
+            Toast.makeText(getContext(), prompt, Toast.LENGTH_SHORT).show();
+            return null;
+        }
         return objects.get(position);
     }
 }
