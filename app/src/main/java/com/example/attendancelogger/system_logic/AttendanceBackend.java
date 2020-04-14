@@ -1,4 +1,4 @@
-package com.example.attendancelogger;
+package com.example.attendancelogger.system_logic;
 
 import android.content.Context;
 
@@ -7,7 +7,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;

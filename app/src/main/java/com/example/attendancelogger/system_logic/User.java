@@ -1,4 +1,4 @@
-package com.example.attendancelogger;
+package com.example.attendancelogger.system_logic;
 
 import androidx.annotation.NonNull;
 
