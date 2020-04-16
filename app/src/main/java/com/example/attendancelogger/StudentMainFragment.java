@@ -38,7 +38,7 @@ public class StudentMainFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(view).navigate(
-                        R.id.action_studentMain_to_manualMarkingFragment);
+                        R.id.action_studentMain_to_bluetoothMarkingFragment);
             }
         });
     }

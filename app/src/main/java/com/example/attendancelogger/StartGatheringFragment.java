@@ -21,37 +21,35 @@ import com.android.volley.VolleyError;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ManualMarkingFragment extends Fragment implements View.OnClickListener, Response.Listener<JSONObject>, Response.ErrorListener {
-    private EditText classIdEdit, activityIdEdit, userIdEdit, weekEdit;
+public class StartGatheringFragment extends Fragment implements View.OnClickListener, Response.Listener<JSONObject>, Response.ErrorListener{
+    private EditText classIdEdit, activityIdEdit, weekEdit;
     private AttendanceBackend backend;
     private View progressBar;
 
-    public ManualMarkingFragment() {
-        // Required empty public constructor
+    public StartGatheringFragment(){
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         backend = AttendanceBackend.getInstance(getContext());
-        return inflater.inflate(R.layout.fragment_manual_marking, container, false);
+        return inflater.inflate(R.layout.fragment_start_gathering, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        userIdEdit = view.findViewById(R.id.user_id_edit);
 
         classIdEdit = view.findViewById(R.id.class_id_edit);
         activityIdEdit=view.findViewById(R.id.activity_id_edit);
         weekEdit = view.findViewById(R.id.week_edit);
 
-        view.findViewById(R.id.confirm_marking_button).setOnClickListener(this);
+        view.findViewById(R.id.button_start_gathering_attendance_bluetooth).setOnClickListener(this);
 
         progressBar = new ProgressBar(getActivity(), null, android.R.attr.progressBarStyleLarge);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        LinearLayout l = getView().findViewById(R.id.professor_manual_layout);
+        LinearLayout l = getView().findViewById(R.id.teacher_bluetooth_marking_layout);
         l.addView(progressBar, params);
         progressBar.setVisibility(View.INVISIBLE);
     }
@@ -59,24 +57,15 @@ public class ManualMarkingFragment extends Fragment implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.confirm_marking_button:
+            case R.id.button_start_gathering_attendance_bluetooth:
                 progressBar.setVisibility(View.VISIBLE);
                 Long classId = Long.parseLong(classIdEdit.getText().toString());
                 Long activityId = Long.parseLong(activityIdEdit.getText().toString());
 
                 Long userId;
-                if(backend.getUser().getRole() == User.Roles.STUDENT)
-                    userId = backend.getUser().getID();
-                else
-                    userId = Long.parseLong(userIdEdit.getText().toString());
+                userId = backend.getUser().getID();
 
                 Integer weekNumber = Integer.parseInt(weekEdit.getText().toString());
-                try {
-                    backend.sendPresenceRequest(
-                            classId,activityId,userId,weekNumber,this,this);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 break;
         }
     }
