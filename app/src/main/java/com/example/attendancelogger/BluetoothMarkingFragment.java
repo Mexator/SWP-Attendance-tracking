@@ -17,9 +17,11 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.example.attendancelogger.system_logic.AttendanceBackend;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 
 public class BluetoothMarkingFragment extends Fragment implements View.OnClickListener, Response.Listener<JSONObject>, Response.ErrorListener {
     private EditText classIdEdit, activityIdEdit, weekEdit;

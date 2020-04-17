@@ -24,6 +24,6 @@
     <string name="prompt_user_id">User id</string>
     <string name="prompt_week">Week Number</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="prompt_class_select">Select Class</string>
+    <string name="prompt_activity_select">Select Activity</string>
 </resources>
