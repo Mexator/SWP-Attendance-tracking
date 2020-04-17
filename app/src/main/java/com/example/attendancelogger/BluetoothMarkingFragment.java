@@ -17,24 +17,24 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.example.attendancelogger.system_logic.AttendanceBackend;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class BluetoothMarkingFragment extends Fragment implements View.OnClickListener, Response.Listener<JSONObject>, Response.ErrorListener{
+public class BluetoothMarkingFragment extends Fragment implements View.OnClickListener, Response.Listener<JSONObject>, Response.ErrorListener {
     private EditText classIdEdit, activityIdEdit, weekEdit;
     private AttendanceBackend backend;
     private View progressBar;
 
-    public BluetoothMarkingFragment(){
+    public BluetoothMarkingFragment() {
+        // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         backend = AttendanceBackend.getInstance(getContext());
-        return inflater.inflate(R.layout.fragment_bluetooth_marking, container, false);
+        return inflater.inflate(R.layout.fragment_try_mark_me_on_this_subject, container, false);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class BluetoothMarkingFragment extends Fragment implements View.OnClickLi
         activityIdEdit=view.findViewById(R.id.activity_id_edit);
         weekEdit = view.findViewById(R.id.week_edit);
 
-        view.findViewById(R.id.button_mark_me_as_attended).setOnClickListener(this);
+        view.findViewById(R.id.confirm_marking_button).setOnClickListener(this);
 
         progressBar = new ProgressBar(getActivity(), null, android.R.attr.progressBarStyleLarge);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
@@ -58,7 +58,7 @@ public class BluetoothMarkingFragment extends Fragment implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.button_mark_me_as_attended:
+            case R.id.confirm_marking_button:
                 progressBar.setVisibility(View.VISIBLE);
                 Long classId = Long.parseLong(classIdEdit.getText().toString());
                 Long activityId = Long.parseLong(activityIdEdit.getText().toString());
@@ -67,6 +67,12 @@ public class BluetoothMarkingFragment extends Fragment implements View.OnClickLi
                 userId = backend.getUser().getID();
 
                 Integer weekNumber = Integer.parseInt(weekEdit.getText().toString());
+                try {
+                    backend.sendPresenceRequest(
+                            classId,activityId,userId,weekNumber,this,this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }
