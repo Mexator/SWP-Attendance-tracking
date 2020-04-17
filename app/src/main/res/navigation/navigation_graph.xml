@@ -12,10 +12,14 @@
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_student_main"
-            app:destination="@id/studentMain" />
+            app:destination="@id/studentMain"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_loginFragment_to_professor_main"
-            app:destination="@id/professorMain" />
+            app:destination="@id/professorMain"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
     <fragment
         android:id="@+id/studentMain"
@@ -33,7 +37,8 @@
         tools:layout="@layout/fragment_professor_main" >
         <action
             android:id="@+id/action_professor_mark_manually"
-            app:destination="@id/manualMarkingFragment" />
+            app:destination="@id/manualMarkingFragment"
+            app:popUpTo="@id/professorMain" />
     </fragment>
     <fragment
         android:id="@+id/manualMarkingFragment"

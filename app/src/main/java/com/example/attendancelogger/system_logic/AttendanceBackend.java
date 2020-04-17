@@ -1,4 +1,4 @@
-package com.example.attendancelogger;
+package com.example.attendancelogger.system_logic;
 
 import android.content.Context;
 
@@ -7,7 +7,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
@@ -17,15 +16,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.security.auth.login.LoginException;
-
 /**
  * Represents API to interact with backend. Uses Singleton pattern
  */
 public class AttendanceBackend{
     private static AttendanceBackend instance;
     private User user;
-    private String serverURL;
+    private String APIEndpoint;
     private RequestQueue requestQueue;
     private Context context;
 
@@ -34,7 +31,7 @@ public class AttendanceBackend{
 
     private AttendanceBackend(Context context) {
         user = User.getInstance();
-        serverURL = "https://attendance-inno.herokuapp.com/api/";
+        APIEndpoint = "https://attendance-inno.herokuapp.com/api/";
         this.context = context;
         requestQueue = Volley.newRequestQueue(context);
         requestQueue.start();
@@ -49,8 +46,8 @@ public class AttendanceBackend{
         return instance;
     }
 
-    public void setServerURL(String serverURL) {
-        this.serverURL = serverURL;
+    public void setAPIEndpoint(String APIEndpoint) {
+        this.APIEndpoint = APIEndpoint;
     }
 
     public boolean isLoggedIn() {
@@ -67,35 +64,53 @@ public class AttendanceBackend{
         this.renewal_token = renewal_token;
         this.last_update = new Date();
     }
-
-    public void parseUser(JSONObject user) throws JSONException{
-        String name = user.getString("first_name") + user.getString("last_name");
-        Long ID = user.getLong("id");
-        User.Roles role = User.parseRole(user.getString("role"));
-        this.user.init(name,ID,role);
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public void logInRequest(String username, String password, Response.Listener<JSONObject> listener,
-                             Response.ErrorListener errorListener)
-            throws LoginException, JSONException {
-        User.Roles role;
-
+    /**
+     * Sends request for receiving auth token, as described in the API
+     * @param username      same as in API description
+     * @param password      same as in API description
+     * @param listener      callback to handle response
+     * @param errorListener callback to handle errors
+     * @throws JSONException
+     */
+    public void sendLogInRequest(String username, String password, Response.Listener<JSONObject> listener,
+                                 Response.ErrorListener errorListener)
+            throws JSONException {
         JSONObject request = new JSONObject();
         JSONObject user = new JSONObject();
         user.put("email", username);
         user.put("password",password);
         request.put("user",user);
 
-        String url = serverURL+"session/";
+        String url = APIEndpoint +"session/";
         sendRequest(Request.Method.POST,url,request,listener,errorListener);
     }
 
-    public void requestUser(Response.Listener<JSONObject> listener,
-                            Response.ErrorListener errorListener){
+    /**
+     * Sends request to get current user
+     * @param listener      callback to handle response
+     * @param errorListener callback to handle errors
+     * @throws JSONException
+     */
+    public void sendUserRequest(Response.Listener<JSONObject> listener,
+                                Response.ErrorListener errorListener){
         assert token != null;
-        sendRequest(Request.Method.GET,serverURL+"current_user",null,listener,errorListener);
+        sendRequest(Request.Method.GET, APIEndpoint +"current_user",null,listener,errorListener);
     }
 
+    /**
+     * Sends request for receiving auth token, as described in the API
+     * @param classId    same as in API description
+     * @param activityId same as in API description
+     * @param userId     same as in API description
+     * @param week       same as in API description
+     * @param listener      callback to handle response
+     * @param errorListener callback to handle errors
+     * @throws JSONException
+     */
     public void sendPresenceRequest(Long classId, Long activityId, Long userId, Integer week,
                                     Response.Listener<JSONObject> listener,
                                     Response.ErrorListener errorListener) throws JSONException{
@@ -108,9 +123,29 @@ public class AttendanceBackend{
         presence.put("week",week);
         body.put("presence",presence);
 
-        String url = serverURL+"presences/";
+        String url = APIEndpoint +"presences/";
         sendRequest(Request.Method.POST,url,body,listener,errorListener);
     }
+
+    /**
+     * Sends request to get list of classes
+     * @param listener      callback to handle response
+     * @param errorListener callback to handle errors
+     */
+    public void sendClassesRequest(Response.Listener<JSONObject> listener,
+                               Response.ErrorListener errorListener){
+        String url = APIEndpoint + "classes";
+        sendRequest(Request.Method.GET,url,null,listener,errorListener);
+    }
+
+    /**
+     * General purpose method to send any request
+     * @param method        POST, GET, etc.
+     * @param url           target url
+     * @param body          json body
+     * @param listener      callback to handle response
+     * @param errorListener callback to handle errors
+     */
     private void sendRequest(int method, String url, JSONObject body,
                              Response.Listener<JSONObject> listener,
                              Response.ErrorListener errorListener){

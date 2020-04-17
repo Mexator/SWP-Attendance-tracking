@@ -13,18 +13,30 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.example.attendancelogger.system_logic.AttendanceBackend;
+import com.example.attendancelogger.system_logic.Class;
+import com.example.attendancelogger.system_logic.User;
+import com.example.attendancelogger.ui_components.PromptSpinner;
+import com.example.attendancelogger.ui_components.PromptSpinnerAdapter;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ManualMarkingFragment extends Fragment implements View.OnClickListener, Response.Listener<JSONObject>, Response.ErrorListener {
     private EditText classIdEdit, activityIdEdit, userIdEdit, weekEdit;
     private AttendanceBackend backend;
     private View progressBar;
+    private PromptSpinner classSpinner;
 
     public ManualMarkingFragment() {
         // Required empty public constructor
@@ -40,12 +52,12 @@ public class ManualMarkingFragment extends Fragment implements View.OnClickListe
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        userIdEdit = view.findViewById(R.id.user_id_edit);
 
+//        Make the User edit invisible for student
+        userIdEdit = view.findViewById(R.id.user_id_edit);
         if(backend.getUser().getRole() == User.Roles.STUDENT)
             userIdEdit.setVisibility(View.GONE);
 
-        classIdEdit = view.findViewById(R.id.class_id_edit);
         activityIdEdit=view.findViewById(R.id.activity_id_edit);
         weekEdit = view.findViewById(R.id.week_edit);
 
@@ -57,6 +69,37 @@ public class ManualMarkingFragment extends Fragment implements View.OnClickListe
         LinearLayout l = getView().findViewById(R.id.professor_manual_layout);
         l.addView(progressBar, params);
         progressBar.setVisibility(View.INVISIBLE);
+
+        classSpinner = view.findViewById(R.id.class_spinner);
+        setupClassSpinner();
+    }
+
+    /**
+     * Receives list of classes from server, fills the adapter
+     * and connect it to the spinner
+     */
+    private void setupClassSpinner(){
+        assert backend != null;
+        final List<Class> classes = new LinkedList<>();
+        //Obtain list of classes
+        backend.sendClassesRequest(new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray rawClasses = (JSONArray)response.get("classes");
+                    for (int i=0;i<rawClasses.length();i++){
+                        classes.add(Class.parseClass((JSONObject)rawClasses.get(i)));
+                    }
+                    //Add the list to the adapter
+                    PromptSpinnerAdapter<Class> adapter = new PromptSpinnerAdapter<>(
+                            getContext(),R.layout.support_simple_spinner_dropdown_item,
+                            classes,R.string.prompt_class_select);
+                    classSpinner.setAdapter(adapter);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        },this);
     }
 
     @Override
@@ -64,7 +107,12 @@ public class ManualMarkingFragment extends Fragment implements View.OnClickListe
         switch (v.getId()){
             case R.id.confirm_marking_button:
                 progressBar.setVisibility(View.VISIBLE);
-                Long classId = Long.parseLong(classIdEdit.getText().toString());
+
+                int pos = classSpinner.getSelectedItemPosition();
+                Class aClass = ((PromptSpinnerAdapter<Class>)classSpinner.getAdapter()).
+                        getSelectedObject(pos);
+                Long classId = aClass.getID();
+
                 Long activityId = Long.parseLong(activityIdEdit.getText().toString());
 
                 Long userId;
