@@ -27,8 +27,8 @@
         android:label="fragment_student_main"
         tools:layout="@layout/fragment_student_main" >
         <action
-            android:id="@+id/action_studentMain_to_manualMarkingFragment"
-            app:destination="@id/manualMarkingFragment" />
+            android:id="@+id/action_studentMain_to_bluetoothMarkingFragment"
+            app:destination="@id/bluetoothMarkingFragment" />
     </fragment>
     <fragment
         android:id="@+id/professorMain"
@@ -39,10 +39,23 @@
             android:id="@+id/action_professor_mark_manually"
             app:destination="@id/manualMarkingFragment"
             app:popUpTo="@id/professorMain" />
+        <action
+            android:id="@+id/action_professorMain_to_startGatheringFragment"
+            app:destination="@id/startGatheringFragment" />
     </fragment>
     <fragment
         android:id="@+id/manualMarkingFragment"
         android:name="com.example.attendancelogger.ManualMarkingFragment"
         android:label="fragment_manual_marking"
         tools:layout="@layout/fragment_manual_marking" />
+    <fragment
+        android:id="@+id/startGatheringFragment"
+        android:name="com.example.attendancelogger.StartGatheringFragment"
+        android:label="fragment_start_gathering"
+        tools:layout="@layout/fragment_start_gathering" />
+    <fragment
+        android:id="@+id/bluetoothMarkingFragment"
+        android:name="com.example.attendancelogger.BluetoothMarkingFragment"
+        android:label="fragment_bluetooth_marking"
+        tools:layout="@layout/fragment_bluetooth_marking" />
 </navigation>

@@ -53,11 +53,8 @@ public class ManualMarkingFragment extends Fragment implements View.OnClickListe
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-//        Make the User edit invisible for student
         userIdEdit = view.findViewById(R.id.user_id_edit);
-        if(backend.getUser().getRole() == User.Roles.STUDENT)
-            userIdEdit.setVisibility(View.GONE);
-
+        classIdEdit = view.findViewById(R.id.class_id_edit);
         activityIdEdit=view.findViewById(R.id.activity_id_edit);
         weekEdit = view.findViewById(R.id.week_edit);
 
