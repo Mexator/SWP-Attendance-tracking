@@ -42,9 +42,6 @@ public class ManualMarkingFragment extends Fragment implements View.OnClickListe
         super.onViewCreated(view, savedInstanceState);
         userIdEdit = view.findViewById(R.id.user_id_edit);
 
-        if(backend.getUser().getRole() == User.Roles.STUDENT)
-            userIdEdit.setVisibility(View.GONE);
-
         classIdEdit = view.findViewById(R.id.class_id_edit);
         activityIdEdit=view.findViewById(R.id.activity_id_edit);
         weekEdit = view.findViewById(R.id.week_edit);

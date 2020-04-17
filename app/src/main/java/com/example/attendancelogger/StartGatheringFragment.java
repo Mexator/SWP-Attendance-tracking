@@ -17,11 +17,6 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-<<<<<<< HEAD
-import com.example.attendancelogger.system_logic.AttendanceBackend;
-
-=======
->>>>>>> 47feae0... New layouts and java classes for them for bluetooth gathering.
 
 import org.json.JSONException;
 import org.json.JSONObject;
