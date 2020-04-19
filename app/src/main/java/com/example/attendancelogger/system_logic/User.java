@@ -15,7 +15,7 @@ public class User {
         return instance;
     }
 
-    public enum Roles {PROFESSOR, STUDENT, ADMIN};
+    public enum Roles {PROFESSOR, STUDENT, ADMIN, UNKNOWN_ROLE};
 
     private Long ID;
     private Roles role;
@@ -44,7 +44,7 @@ public class User {
             return Roles.PROFESSOR;
         if(role.toLowerCase().equals("administrator"))
             return Roles.ADMIN;
-        return null;
+        return Roles.UNKNOWN_ROLE;
     }
 
     public static void parseUser(JSONObject user) throws JSONException {

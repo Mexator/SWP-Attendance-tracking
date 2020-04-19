@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -134,8 +135,14 @@ public class AttendanceBackend{
      */
     public void sendClassesRequest(Response.Listener<JSONObject> listener,
                                Response.ErrorListener errorListener){
-        String url = APIEndpoint + "classes";
+        String url = APIEndpoint + "user_classes";
         sendRequest(Request.Method.GET,url,null,listener,errorListener);
+    }
+
+    public void sendUsersByClassRequest(Long classID,Response.Listener<JSONObject> listener,
+                                        Response.ErrorListener errorListener) {
+        String url = APIEndpoint + "class_students/" + classID;
+        sendRequest(Request.Method.GET, url,null,listener,errorListener);
     }
 
     /**

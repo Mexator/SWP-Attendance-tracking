@@ -9,35 +9,34 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.example.attendancelogger.system_logic.AttendanceBackend;
-import com.example.attendancelogger.system_logic.Class;
-import com.example.attendancelogger.system_logic.User;
-import com.example.attendancelogger.ui_components.PromptSpinner;
-import com.example.attendancelogger.ui_components.PromptSpinnerAdapter;
+import com.example.attendancelogger.system_logic.*;
+import com.example.attendancelogger.ui_components.*;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ManualMarkingFragment extends Fragment implements View.OnClickListener, Response.Listener<JSONObject>, Response.ErrorListener {
-    private EditText classIdEdit, activityIdEdit, userIdEdit, weekEdit;
+    private EditText activityIdEdit,
+            weekEdit;
     private AttendanceBackend backend;
     private View progressBar;
     private PromptSpinner classSpinner;
-
+    private PromptSpinner studentSpinner;
+    private Button confirmButton;
     public ManualMarkingFragment() {
         // Required empty public constructor
     }
@@ -53,15 +52,11 @@ public class ManualMarkingFragment extends Fragment implements View.OnClickListe
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-//        Make the User edit invisible for student
-        userIdEdit = view.findViewById(R.id.user_id_edit);
-        if(backend.getUser().getRole() == User.Roles.STUDENT)
-            userIdEdit.setVisibility(View.GONE);
-
-        activityIdEdit=view.findViewById(R.id.activity_id_edit);
+        activityIdEdit = view.findViewById(R.id.activity_id_edit);
         weekEdit = view.findViewById(R.id.week_edit);
 
-        view.findViewById(R.id.confirm_marking_button).setOnClickListener(this);
+        confirmButton = view.findViewById(R.id.confirm_marking_button);
+        confirmButton.setOnClickListener(this);
 
         progressBar = new ProgressBar(getActivity(), null, android.R.attr.progressBarStyleLarge);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
@@ -71,60 +66,111 @@ public class ManualMarkingFragment extends Fragment implements View.OnClickListe
         progressBar.setVisibility(View.INVISIBLE);
 
         classSpinner = view.findViewById(R.id.class_spinner);
+        studentSpinner = view.findViewById(R.id.user_spinner);
         setupClassSpinner();
     }
 
+    //TODO think about how to generalize two following functions
     /**
      * Receives list of classes from server, fills the adapter
      * and connect it to the spinner
      */
-    private void setupClassSpinner(){
+    private void setupClassSpinner() {
         assert backend != null;
-        final List<Class> classes = new LinkedList<>();
+        final List<StudyClass> classes = new LinkedList<>();
         //Obtain list of classes
         backend.sendClassesRequest(new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONArray rawClasses = (JSONArray)response.get("classes");
-                    for (int i=0;i<rawClasses.length();i++){
-                        classes.add(Class.parseClass((JSONObject)rawClasses.get(i)));
+                    JSONArray rawClasses = response.getJSONArray("classes");
+                    for (int i = 0; i < rawClasses.length(); i++) {
+                        classes.add(StudyClass.parseClass((JSONObject) rawClasses.get(i)));
                     }
                     //Add the list to the adapter
-                    PromptSpinnerAdapter<Class> adapter = new PromptSpinnerAdapter<>(
-                            getContext(),R.layout.support_simple_spinner_dropdown_item,
-                            classes,R.string.prompt_class_select);
+                    PromptSpinnerAdapter<StudyClass> adapter = new PromptSpinnerAdapter<>(
+                            getContext(), R.layout.support_simple_spinner_dropdown_item,
+                            classes, R.string.prompt_class_select);
                     classSpinner.setAdapter(adapter);
+                    classSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            StudyClass item = (StudyClass) (classSpinner.getSelectedItem());
+                            setupStudentSpinner(item.getID());
+                            studentSpinner.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+                        }
+                    });
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-        },this);
+        }, this);
+    }
+
+    /**
+     * Receives list of students from server, fills the adapter
+     * and connect it to the spinner
+     */
+    private void setupStudentSpinner(Long classID) {
+        assert backend != null;
+        final List<Student> students = new LinkedList<>();
+        //Obtain list of users, assigned to selected class
+        backend.sendUsersByClassRequest(classID, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    //Create list of students
+                    JSONArray rawStudents = response.getJSONArray("students");
+                    for (int i = 0; i < rawStudents.length(); i++) {
+                        students.add(Student.parseStudent(rawStudents.getJSONObject(i)));
+                    }
+                    //Add the list to the adapter
+                    PromptSpinnerAdapter<Student> adapter = new PromptSpinnerAdapter<>(
+                            getContext(), R.layout.support_simple_spinner_dropdown_item,
+                            students, R.string.prompt_user_select);
+                    //Add the adapter to spinner
+                    studentSpinner.setAdapter(adapter);
+                    studentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            activityIdEdit.setVisibility(View.VISIBLE);
+                            weekEdit.setVisibility(View.VISIBLE);
+                            confirmButton.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, this);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.confirm_marking_button:
                 progressBar.setVisibility(View.VISIBLE);
 
-                int pos = classSpinner.getSelectedItemPosition();
-                Class aClass = ((PromptSpinnerAdapter<Class>)classSpinner.getAdapter()).
-                        getSelectedObject(pos);
+                StudyClass aClass = (StudyClass) classSpinner.getSelectedItem();
                 Long classId = aClass.getID();
 
                 Long activityId = Long.parseLong(activityIdEdit.getText().toString());
 
-                Long userId;
-                if(backend.getUser().getRole() == User.Roles.STUDENT)
-                    userId = backend.getUser().getID();
-                else
-                    userId = Long.parseLong(userIdEdit.getText().toString());
+                Student student = (Student) studentSpinner.getSelectedItem();
+                Long userId = student.getID();
 
                 Integer weekNumber = Integer.parseInt(weekEdit.getText().toString());
                 try {
                     backend.sendPresenceRequest(
-                            classId,activityId,userId,weekNumber,this,this);
+                            classId, activityId, userId, weekNumber, this, this);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -135,11 +181,11 @@ public class ManualMarkingFragment extends Fragment implements View.OnClickListe
     @Override
     public void onResponse(JSONObject response) {
         progressBar.setVisibility(View.INVISIBLE);
-        Toast.makeText(getContext(),"Successfully marked!",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Successfully marked!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        Toast.makeText(getContext(),"Error",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
     }
 }
