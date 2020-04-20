@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -58,11 +59,7 @@ public class ManualMarkingFragment extends Fragment implements View.OnClickListe
         confirmButton = view.findViewById(R.id.confirm_marking_button);
         confirmButton.setOnClickListener(this);
 
-        progressBar = new ProgressBar(getActivity(), null, android.R.attr.progressBarStyleLarge);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
-        params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        LinearLayout l = getView().findViewById(R.id.professor_manual_layout);
-        l.addView(progressBar, params);
+        progressBar = view.findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.INVISIBLE);
 
         classSpinner = view.findViewById(R.id.class_spinner);
@@ -158,6 +155,8 @@ public class ManualMarkingFragment extends Fragment implements View.OnClickListe
         switch (v.getId()) {
             case R.id.confirm_marking_button:
                 progressBar.setVisibility(View.VISIBLE);
+                getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                 StudyClass aClass = (StudyClass) classSpinner.getSelectedItem();
                 Long classId = aClass.getID();
@@ -181,11 +180,14 @@ public class ManualMarkingFragment extends Fragment implements View.OnClickListe
     @Override
     public void onResponse(JSONObject response) {
         progressBar.setVisibility(View.INVISIBLE);
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         Toast.makeText(getContext(), "Successfully marked!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onErrorResponse(VolleyError error) {
+        progressBar.setVisibility(View.INVISIBLE);
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
     }
 }

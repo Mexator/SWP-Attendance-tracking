@@ -3,12 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:gravity="center"
     android:orientation="vertical"
     tools:context=".ManualMarkingFragment"
-    android:paddingHorizontal="40dp"
     android:id="@+id/professor_manual_layout">
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        style="@android:style/Widget.Material.ProgressBar.Horizontal"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/colorPrimaryDark"
+        android:layout_marginTop="-7dp"
+        android:visibility="invisible"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="40dp"
+        android:orientation="vertical"
+        android:gravity="center">
 
     <com.example.attendancelogger.ui_components.PromptSpinner
         android:id="@+id/class_spinner"
@@ -44,5 +57,6 @@
         android:layout_height="wrap_content"
         android:text="@string/mark_student_manually"
         android:visibility="gone"/>
+    </LinearLayout>
 
 </LinearLayout>
