@@ -8,8 +8,10 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -62,20 +64,17 @@ public class LoginFragment extends Fragment implements Response.Listener<JSONObj
         super.onViewCreated(view, savedInstanceState);
         loginEdit = getView().findViewById(R.id.login_edit);
         passwordEdit = getView().findViewById(R.id.password_edit);
-        progressBar = new ProgressBar(getActivity(), null, android.R.attr.progressBarStyleLarge);
+        progressBar = view.findViewById(R.id.progress_bar);
         getView().findViewById(R.id.button_log_in).setOnClickListener(this);
 
-        //TODO Change progress bar
-        //TODO Forbid actions while waiting for response
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
-        params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        LinearLayout l = getView().findViewById(R.id.login_layout);
-        l.addView(progressBar, params);
         progressBar.setVisibility(View.INVISIBLE);
-
     }
 
     private void sendLogInRequest(){
+        progressBar.setVisibility(View.VISIBLE);
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
         backend = AttendanceBackend.getInstance(getContext());
         String login = loginEdit.getText().toString();
         String password = passwordEdit.getText().toString();
@@ -85,7 +84,6 @@ public class LoginFragment extends Fragment implements Response.Listener<JSONObj
         catch (Exception ex) {
             Toast.makeText(getActivity(), ex.toString(), Toast.LENGTH_SHORT).show();
         }
-        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -100,7 +98,6 @@ public class LoginFragment extends Fragment implements Response.Listener<JSONObj
             else if(response.has("user")){
                 User.parseUser(response.getJSONObject("user"));
                 backend.setUser(User.getInstance());
-                progressBar.setVisibility(View.INVISIBLE);
                 if(backend.getUser().getRole() == User.Roles.STUDENT){
                     //TODO Make Navigation controller a field
                     Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_student_main);
@@ -112,6 +109,8 @@ public class LoginFragment extends Fragment implements Response.Listener<JSONObj
         }catch (JSONException e) {
             e.printStackTrace();
         }
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        progressBar.setVisibility(View.INVISIBLE);
     }
     
     //TODO change login architecture
@@ -119,6 +118,7 @@ public class LoginFragment extends Fragment implements Response.Listener<JSONObj
     @Override
     public void onErrorResponse(VolleyError error) {
         progressBar.setVisibility(View.INVISIBLE);
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         String message;
         if (error instanceof NetworkError)
             message = "Network Error";
