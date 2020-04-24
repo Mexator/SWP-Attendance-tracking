@@ -2,6 +2,8 @@ package com.example.attendancelogger.system_logic;
 
 import androidx.annotation.NonNull;
 
+import com.example.attendancelogger.R;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -40,7 +42,7 @@ public class User {
     public static Roles parseRole(String role){
         if(role.toLowerCase().equals("student"))
             return Roles.STUDENT;
-        if(role.toLowerCase().equals("professor"))
+        if(role.toLowerCase().equals("professor") || role.toLowerCase().equals("teacher"))
             return Roles.PROFESSOR;
         if(role.toLowerCase().equals("administrator"))
             return Roles.ADMIN;
@@ -52,5 +54,22 @@ public class User {
         Long ID = user.getLong("id");
         User.Roles role = User.parseRole(user.getString("role"));
         User.getInstance().init(name,ID,role);
+    }
+
+    private static int getLoginPath(Roles role) {
+        int ret = -1;
+        switch (role){
+            case STUDENT:
+                ret = R.id.studentMain;
+                break;
+            case ADMIN:
+            case PROFESSOR:
+                ret = R.id.professorMain;
+        }
+        return ret;
+    }
+
+    public int getLoginPath(){
+        return getLoginPath(this.role);
     }
 }

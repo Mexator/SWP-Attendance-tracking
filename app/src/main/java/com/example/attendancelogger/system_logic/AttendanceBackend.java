@@ -1,6 +1,7 @@
 package com.example.attendancelogger.system_logic;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -9,12 +10,14 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -25,22 +28,21 @@ public class AttendanceBackend{
     private User user;
     private String APIEndpoint;
     private RequestQueue requestQueue;
-    private Context context;
 
-    private String token, renewal_token;
-    private Date last_update;
+    private String token,
+            renewalToken;
+    private Date lastUpdate;
 
     private AttendanceBackend(Context context) {
         user = User.getInstance();
         APIEndpoint = "https://attendance-inno.herokuapp.com/api/";
-        this.context = context;
         requestQueue = Volley.newRequestQueue(context);
         requestQueue.start();
     }
 
     public static AttendanceBackend getInstance(Context context) {
-        synchronized (AttendanceBackend.class){
-            if (instance == null){
+        if (instance == null){
+            synchronized (AttendanceBackend.class){
                 instance = new AttendanceBackend(context);
             }
         }
@@ -59,14 +61,33 @@ public class AttendanceBackend{
         return user;
     }
 
-    public void setToken(String token, String renewal_token)
-    {
+    public void setToken(String token, String renewalToken) {
+        Date lastUpdate = new Date();
+        setToken(token, renewalToken, lastUpdate);
+    }
+
+    public void setToken(String token, String renewalToken, Date lastUpdate){
         this.token = token;
-        this.renewal_token = renewal_token;
-        this.last_update = new Date();
+        this.renewalToken = renewalToken;
+        this.lastUpdate = lastUpdate;
     }
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void saveAccessInfo(Context context){
+        synchronized (AttendanceBackend.class) {
+            SharedPreferences prefs = context.getSharedPreferences(
+                    SharedConstants.ACCESS_PREFS_FILE,
+                    Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("INITIALIZED", true);
+            editor.putString("ACCESS_TOKEN", token);
+            editor.putString("RENEWAL_TOKEN", renewalToken);
+            DateFormat df = new SimpleDateFormat(SharedConstants.DATE_FORMAT, Locale.US);
+            editor.putString("LAST_UPDATE", df.format(lastUpdate));
+            editor.apply();
+        }
     }
 
     /**
@@ -138,7 +159,6 @@ public class AttendanceBackend{
         String url = APIEndpoint + "user_classes";
         sendRequest(Request.Method.GET,url,null,listener,errorListener);
     }
-
     public void sendUsersByClassRequest(Long classID,Response.Listener<JSONObject> listener,
                                         Response.ErrorListener errorListener) {
         String url = APIEndpoint + "class_students/" + classID;

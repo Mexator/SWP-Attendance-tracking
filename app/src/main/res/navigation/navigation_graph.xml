@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/waiting">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -41,4 +41,9 @@
         android:name="com.example.attendancelogger.ManualMarkingFragment"
         android:label="fragment_manual_marking"
         tools:layout="@layout/fragment_manual_marking" />
+    <fragment
+        android:id="@+id/waiting"
+        android:name="com.example.attendancelogger.Waiting"
+        android:label="fragment_waiting"
+        tools:layout="@layout/fragment_waiting" />
 </navigation>

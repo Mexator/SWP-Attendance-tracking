@@ -25,4 +25,6 @@
     <string name="prompt_class_select">Select Class</string>
     <string name="prompt_activity_select">Select Activity</string>
     <string name="prompt_user_select">Select User</string>
+
+    <string name="waiting_sign">Please wait… We retrieving some data</string>
 </resources>

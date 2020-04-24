@@ -94,6 +94,7 @@ public class LoginFragment extends Fragment implements Response.Listener<JSONObj
                 backend.setToken(data.getString("token"),
                         data.getString("renewal_token"));
                 backend.sendUserRequest(this,this);
+                backend.saveAccessInfo(getContext());
             }
             else if(response.has("user")){
                 User.parseUser(response.getJSONObject("user"));
