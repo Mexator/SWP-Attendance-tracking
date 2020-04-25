@@ -36,14 +36,18 @@ public class ProfessorMainFragment extends Fragment implements View.OnClickListe
         super.onViewCreated(view, savedInstanceState);
 
         view.findViewById(R.id.button_mark_manually).setOnClickListener(this);
+        view.findViewById(R.id.button_start_gathering_attendance).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.button_mark_manually:
-                View view = getView();
-                Navigation.findNavController(view).navigate(R.id.action_professor_mark_manually);
+                Navigation.findNavController(getView()).navigate(R.id.action_professor_mark_manually);
+                break;
+            case R.id.button_start_gathering_attendance:
+                Navigation.findNavController(getView()).navigate(
+                        R.id.action_professorMain_to_startGatheringAttendanceFragment);
                 break;
         }
     }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".StartGatheringAttendanceFragment"
+    android:paddingHorizontal="40dp"
+    android:id="@+id/bluetooth_gathering_layout">
+
+    <EditText
+        android:id="@+id/class_id_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/prompt_class_id"
+        android:inputType="numberDecimal"/>
+
+    <EditText
+        android:id="@+id/activity_id_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/prompt_activity_id"
+        android:inputType="numberDecimal"/>
+
+    <EditText
+        android:id="@+id/week_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/prompt_week"
+        android:inputType="numberDecimal"/>
+
+    <Button
+        android:id="@+id/button_start_gathering_attendance_bluetooth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/start_gathering_attendance_of_this_activity"
+        android:inputType="numberDecimal"/>
+
+</LinearLayout>
