@@ -33,5 +33,13 @@ public class StudentMainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         markMeButton = view.findViewById(R.id.button_mark_me);
+
+        markMeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(
+                        R.id.action_studentMain_to_bluetoothMarkingFragment);
+            }
+        });
     }
 }
