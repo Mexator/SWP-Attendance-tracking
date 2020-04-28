@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.my_nav_host_fragment);
         if (isFirstLaunch) {
             //Navigate to login
-            navController.navigate(R.id.loginFragment);
+            navController.navigate(R.id.action_waiting_to_loginFragment);
         } else {
             // Send User query.
             // At this point both keys and lastUpdate should be set at the backend instance
@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             User.parseUser(response.getJSONObject("user"));
                             backend.setUser(User.getInstance());
-                            navController.popBackStack(R.id.waiting, true);
                             navController.navigate(backend.getUser().getLoginPath());
                         } catch (JSONException e) {
                             Log.e(SharedConstants.loginErrorTag,"Cannot parse server response",e);

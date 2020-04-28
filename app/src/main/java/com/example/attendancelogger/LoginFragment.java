@@ -5,8 +5,10 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,6 +37,7 @@ public class LoginFragment extends Fragment implements Response.Listener<JSONObj
     private EditText passwordEdit;
     private View progressBar;
     private AttendanceBackend backend;
+    private NavController navController;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -64,10 +67,22 @@ public class LoginFragment extends Fragment implements Response.Listener<JSONObj
         super.onViewCreated(view, savedInstanceState);
         loginEdit = getView().findViewById(R.id.login_edit);
         passwordEdit = getView().findViewById(R.id.password_edit);
+        passwordEdit.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP){
+                    sendLogInRequest();
+                    return true;
+                }
+                return false;
+            }
+        });
+
         progressBar = view.findViewById(R.id.progress_bar);
         getView().findViewById(R.id.button_log_in).setOnClickListener(this);
 
         progressBar.setVisibility(View.INVISIBLE);
+        navController = Navigation.findNavController(getActivity(), R.id.my_nav_host_fragment);
     }
 
     private void sendLogInRequest(){
@@ -100,11 +115,10 @@ public class LoginFragment extends Fragment implements Response.Listener<JSONObj
                 User.parseUser(response.getJSONObject("user"));
                 backend.setUser(User.getInstance());
                 if(backend.getUser().getRole() == User.Roles.STUDENT){
-                    //TODO Make Navigation controller a field
-                    Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_student_main);
+                    navController.navigate(R.id.action_loginFragment_to_student_main);
                 }
                 else{
-                    Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_professor_main);
+                    navController.navigate(R.id.action_loginFragment_to_professor_main);
                 }
             }
         }catch (JSONException e) {
