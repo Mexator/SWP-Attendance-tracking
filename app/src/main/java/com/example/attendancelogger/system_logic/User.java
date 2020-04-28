@@ -60,11 +60,11 @@ public class User {
         int ret = -1;
         switch (role){
             case STUDENT:
-                ret = R.id.studentMain;
+                ret = R.id.action_waiting_to_studentMain;
                 break;
             case ADMIN:
             case PROFESSOR:
-                ret = R.id.professorMain;
+                ret = R.id.action_waiting_to_professorMain;
         }
         return ret;
     }
