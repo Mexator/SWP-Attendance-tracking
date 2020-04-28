@@ -90,8 +90,13 @@ public class ManualMarkingFragment extends Fragment implements View.OnClickListe
                             classes, R.string.prompt_class_select);
                     classSpinner.setAdapter(adapter);
                     classSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        boolean initial_call = true;
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            if(initial_call){
+                                initial_call = false;
+                                return;
+                            }
                             StudyClass item = (StudyClass) (classSpinner.getSelectedItem());
                             setupStudentSpinner(item.getID());
                             studentSpinner.setVisibility(View.VISIBLE);
@@ -132,8 +137,13 @@ public class ManualMarkingFragment extends Fragment implements View.OnClickListe
                     //Add the adapter to spinner
                     studentSpinner.setAdapter(adapter);
                     studentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        boolean initial_call = true;
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            if(initial_call){
+                                initial_call = false;
+                                return;
+                            }
                             activityIdEdit.setVisibility(View.VISIBLE);
                             weekEdit.setVisibility(View.VISIBLE);
                             confirmButton.setVisibility(View.VISIBLE);
