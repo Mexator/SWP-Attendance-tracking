@@ -1,4 +1,4 @@
-package com.example.attendancelogger;
+package com.swp.attendancelogger;
 
 import android.os.Bundle;
 
@@ -13,15 +13,12 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.example.attendancelogger.system_logic.*;
-import com.example.attendancelogger.ui_components.*;
+import com.swp.attendancelogger.system_logic.*;
+import com.swp.attendancelogger.ui_components.*;
 
 import org.json.JSONArray;
 import org.json.JSONException;

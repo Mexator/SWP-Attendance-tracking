@@ -1,4 +1,4 @@
-package com.example.attendancelogger.system_logic;
+package com.swp.attendancelogger.system_logic;
 
 public final class SharedConstants {
     private SharedConstants(){}

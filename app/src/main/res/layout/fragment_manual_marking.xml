@@ -23,13 +23,13 @@
         android:orientation="vertical"
         android:gravity="center">
 
-    <com.example.attendancelogger.ui_components.PromptSpinner
+    <com.swp.attendancelogger.ui_components.PromptSpinner
         android:id="@+id/class_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:prompt="@string/prompt_class_select"/>
 
-    <com.example.attendancelogger.ui_components.PromptSpinner
+    <com.swp.attendancelogger.ui_components.PromptSpinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/user_spinner"

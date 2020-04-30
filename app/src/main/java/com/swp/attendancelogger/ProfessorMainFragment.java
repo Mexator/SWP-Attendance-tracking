@@ -1,4 +1,4 @@
-package com.example.attendancelogger;
+package com.swp.attendancelogger;
 
 import android.os.Bundle;
 

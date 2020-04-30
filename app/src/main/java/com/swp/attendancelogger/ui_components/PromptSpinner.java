@@ -1,9 +1,7 @@
-package com.example.attendancelogger.ui_components;
+package com.swp.attendancelogger.ui_components;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 
 public class PromptSpinner extends androidx.appcompat.widget.AppCompatSpinner {
     private PromptSpinnerAdapter adapter;

@@ -1,4 +1,4 @@
-package com.example.attendancelogger;
+package com.swp.attendancelogger;
 
 import android.os.Bundle;
 
@@ -13,30 +13,26 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.example.attendancelogger.system_logic.AttendanceBackend;
+import com.swp.attendancelogger.system_logic.AttendanceBackend;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-
-public class BluetoothMarkingFragment extends Fragment implements View.OnClickListener, Response.Listener<JSONObject>, Response.ErrorListener {
+public class StartGatheringAttendanceFragment extends Fragment implements View.OnClickListener, Response.Listener<JSONObject>, Response.ErrorListener{
     private EditText classIdEdit, activityIdEdit, weekEdit;
     private AttendanceBackend backend;
     private View progressBar;
 
-    public BluetoothMarkingFragment() {
-        // Required empty public constructor
+    public StartGatheringAttendanceFragment(){
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         backend = AttendanceBackend.getInstance(getContext());
-        return inflater.inflate(R.layout.fragment_bluetooth_marking, container, false);
+        return inflater.inflate(R.layout.fragment_start_gathering_attendance, container, false);
     }
 
     @Override
@@ -47,12 +43,12 @@ public class BluetoothMarkingFragment extends Fragment implements View.OnClickLi
         activityIdEdit=view.findViewById(R.id.activity_id_edit);
         weekEdit = view.findViewById(R.id.week_edit);
 
-        view.findViewById(R.id.try_marking_button).setOnClickListener(this);
+        view.findViewById(R.id.button_start_gathering_attendance_bluetooth).setOnClickListener(this);
 
         progressBar = new ProgressBar(getActivity(), null, android.R.attr.progressBarStyleLarge);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        LinearLayout l = getView().findViewById(R.id.bluetooth_marking_layout);
+        LinearLayout l = getView().findViewById(R.id.bluetooth_gathering_layout);
         l.addView(progressBar, params);
         progressBar.setVisibility(View.INVISIBLE);
     }
@@ -60,7 +56,7 @@ public class BluetoothMarkingFragment extends Fragment implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.confirm_marking_button:
+            case R.id.button_start_gathering_attendance_bluetooth:
                 progressBar.setVisibility(View.VISIBLE);
                 Long classId = Long.parseLong(classIdEdit.getText().toString());
                 Long activityId = Long.parseLong(activityIdEdit.getText().toString());

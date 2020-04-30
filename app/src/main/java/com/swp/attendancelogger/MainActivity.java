@@ -1,4 +1,4 @@
-package com.example.attendancelogger;
+package com.swp.attendancelogger;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -12,9 +12,9 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.example.attendancelogger.system_logic.AttendanceBackend;
-import com.example.attendancelogger.system_logic.SharedConstants;
-import com.example.attendancelogger.system_logic.User;
+import com.swp.attendancelogger.system_logic.AttendanceBackend;
+import com.swp.attendancelogger.system_logic.SharedConstants;
+import com.swp.attendancelogger.system_logic.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;

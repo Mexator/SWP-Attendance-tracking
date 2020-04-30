@@ -1,4 +1,4 @@
-package com.example.attendancelogger.ui_components;
+package com.swp.attendancelogger.ui_components;
 
 import android.content.Context;
 import android.widget.ArrayAdapter;
@@ -8,7 +8,7 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
-import com.example.attendancelogger.NameID;
+import com.swp.attendancelogger.system_logic.NameID;
 
 import java.util.List;
 /**

@@ -1,4 +1,4 @@
-package com.example.attendancelogger;
+package com.swp.attendancelogger;
 
 import android.os.Bundle;
 
@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Waiting extends Fragment {
+public class WaitingFragment extends Fragment {
 
-    public Waiting() {
+    public WaitingFragment() {
         // Required empty public constructor
     }
 

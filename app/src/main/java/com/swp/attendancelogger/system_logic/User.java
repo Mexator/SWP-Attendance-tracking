@@ -1,8 +1,8 @@
-package com.example.attendancelogger.system_logic;
+package com.swp.attendancelogger.system_logic;
 
 import androidx.annotation.NonNull;
 
-import com.example.attendancelogger.R;
+import com.swp.attendancelogger.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;

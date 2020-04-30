@@ -1,6 +1,4 @@
-package com.example.attendancelogger.system_logic;
-
-import com.example.attendancelogger.NameID;
+package com.swp.attendancelogger.system_logic;
 
 import org.json.JSONException;
 import org.json.JSONObject;
