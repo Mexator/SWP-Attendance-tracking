@@ -219,8 +219,7 @@ public class AttendanceBackend {
     private void sendRequest(int method, String url, JSONObject body,
                              Response.Listener<JSONObject> listener,
                              Response.ErrorListener errorListener) {
-        //TODO Add token renewal
-        if ((new Date().getTime() - lastUpdate.getTime()) > RENEWAL_INTERVAL) {
+        if (lastUpdate != null && (new Date().getTime() - lastUpdate.getTime()) > RENEWAL_INTERVAL) {
             sendRenewalRequest();
         }
         JsonObjectRequest request;
@@ -241,4 +240,6 @@ public class AttendanceBackend {
 }
 
 
-//curl -X POST -H "Authorization: RENEW_TOKEN" https://attendance-inno.herokuapp.com/api/api/session/renew
+    //curl -X POST -H "Authorization: SFMyNTY.YzJmMDQwODMtOTY3Ni00MTFhLWIyMDctZjZkMWIzOWQyNjk4.rsEf0ijmJX6xMlS0p2iEjogWdGTTaHScp8oVEB4Z0M0" https://attendance-inno.herokuapp.com/api/api/session/renew
+//curl -X POST -H "Authorization: SFMyNTY.NWVhODlhODUtNWMzNS00NDE1LWE0NzEtZmExZWMzYWE0NTU3.RToGGIQ5DtZFEPfBm_MRy20rNpNzVOparuNUhlkdFcs" https://attendance-inno.herokuapp.com/api/api/session/renew
+//SFMyNTY.NWVhODlhODUtNWMzNS00NDE1LWE0NzEtZmExZWMzYWE0NTU3.RToGGIQ5DtZFEPfBm_MRy20rNpNzVOparuNUhlkdFcs
