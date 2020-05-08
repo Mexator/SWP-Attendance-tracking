@@ -82,16 +82,14 @@ public class ManualMarkingFragment extends Fragment implements View.OnClickListe
                         classes.add(StudyClass.parseClass((JSONObject) rawClasses.get(i)));
                     }
                     //Add the list to the adapter
-                    PromptSpinnerAdapter<StudyClass> adapter = new PromptSpinnerAdapter<>(
+                    final PromptSpinnerAdapter<StudyClass> adapter = new PromptSpinnerAdapter<>(
                             getContext(), R.layout.support_simple_spinner_dropdown_item,
                             classes, R.string.prompt_class_select);
                     classSpinner.setAdapter(adapter);
                     classSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        boolean initial_call = true;
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            if(initial_call){
-                                initial_call = false;
+                            if(position == adapter.getCount()){
                                 return;
                             }
                             StudyClass item = (StudyClass) (classSpinner.getSelectedItem());
@@ -128,17 +126,15 @@ public class ManualMarkingFragment extends Fragment implements View.OnClickListe
                         students.add(Student.parseStudent(rawStudents.getJSONObject(i)));
                     }
                     //Add the list to the adapter
-                    PromptSpinnerAdapter<Student> adapter = new PromptSpinnerAdapter<>(
+                    final PromptSpinnerAdapter<Student> adapter = new PromptSpinnerAdapter<>(
                             getContext(), R.layout.support_simple_spinner_dropdown_item,
                             students, R.string.prompt_user_select);
                     //Add the adapter to spinner
                     studentSpinner.setAdapter(adapter);
                     studentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        boolean initial_call = true;
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            if(initial_call){
-                                initial_call = false;
+                            if(position == adapter.getCount()){
                                 return;
                             }
                             activityIdEdit.setVisibility(View.VISIBLE);
