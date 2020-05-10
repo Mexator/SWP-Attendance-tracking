@@ -9,6 +9,27 @@
     android:paddingHorizontal="40dp"
     android:id="@+id/bluetooth_marking_layout">
 
+    <Button
+        android:id="@+id/btnONOFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="ON/OFF Bluetooth" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnFindUnpairedDevices"
+        android:text="Discover"
+        android:onClick="btnDiscover"/>
+
+    <ListView
+        android:layout_below="@id/btnFindUnpairedDevices"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:id="@+id/lvNewDevices"/>
+
     <EditText
         android:id="@+id/class_id_edit"
         android:layout_width="match_parent"
@@ -36,5 +57,6 @@
         android:layout_height="wrap_content"
         android:text="@string/try_mark_my_attendance"
         android:inputType="numberDecimal"/>
+
 
 </LinearLayout>
