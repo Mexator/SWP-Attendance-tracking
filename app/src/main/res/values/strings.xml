@@ -30,7 +30,7 @@
 
 
     <string name="try_mark_my_attendance">Try mark me on this activity</string>
-    <string name="start_gathering_attendance_of_this_activity">Start Gathering Attendance On this activity</string>
+    <string name="start_gathering_attendance_of_this_activity">Start Gathering Attendance on activity</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

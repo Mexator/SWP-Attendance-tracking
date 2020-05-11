@@ -9,6 +9,14 @@
     android:paddingHorizontal="40dp"
     android:id="@+id/bluetooth_gathering_layout">
 
+    <Button
+        android:id="@+id/btnONOFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="ON/OFF Bluetooth" />
+
     <EditText
         android:id="@+id/class_id_edit"
         android:layout_width="match_parent"
